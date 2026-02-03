@@ -16,10 +16,12 @@ pipeline {
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main',
+                git(
+                    branch: 'main',
                     credentialsId: 'github',
-                    url: 'https://github.com/Mohamed0emad/register-app-cicd.git',
-                sh "ls -al"
+                    url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
+                )
+                sh 'ls -al'
             }
         }
 
@@ -34,6 +36,5 @@ pipeline {
                 sh 'mvn test'
             }
         }
-
     }
 }

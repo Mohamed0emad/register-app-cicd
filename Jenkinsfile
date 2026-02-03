@@ -29,20 +29,10 @@ pipeline {
             }
         }
 
-        stage("Build Application") {
+        stage("Build & Test") {
             steps {
                 sh '''
-                mvn -B -T 1C \
-                -DskipTests \
-                clean package
-                '''
-            }
-        }
-
-        stage("Test Application") {
-            steps {
-                sh '''
-                mvn -B -T 1C test
+                mvn -B -T 1C clean package test
                 '''
             }
         }

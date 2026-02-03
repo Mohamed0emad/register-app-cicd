@@ -6,11 +6,18 @@ pipeline {
         maven 'Maven3'
     }
 
+    environment {
+        MAVEN_OPTS = "-Dmaven.repo.local=$HOME/.m2/repository"
+    }
+
     stages {
 
         stage("Cleanup Workspace") {
             steps {
-                cleanWs()
+                cleanWs(
+                    deleteDirs: true,
+                    disableDeferredWipeout: true
+                )
             }
         }
 
@@ -21,19 +28,18 @@ pipeline {
                     credentialsId: 'github',
                     url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
                 )
-                sh 'ls -al'
             }
         }
 
         stage("Build Application") {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
 
         stage("Test Application") {
             steps {
-                sh 'mvn test'
+                sh 'mvn -B test'
             }
         }
     }

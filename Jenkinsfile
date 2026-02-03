@@ -7,17 +7,15 @@ pipeline {
     }
 
     environment {
-        MAVEN_OPTS = "-Dmaven.repo.local=$HOME/.m2/repository"
+        MAVEN_REPO = "/var/lib/jenkins/.m2"
+        MAVEN_OPTS = "-Dmaven.repo.local=${MAVEN_REPO}"
     }
 
     stages {
 
         stage("Cleanup Workspace") {
             steps {
-                cleanWs(
-                    deleteDirs: true,
-                    disableDeferredWipeout: true
-                )
+                sh 'rm -rf target || true'
             }
         }
 
@@ -33,13 +31,19 @@ pipeline {
 
         stage("Build Application") {
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh '''
+                mvn -B -T 1C \
+                -DskipTests \
+                clean package
+                '''
             }
         }
 
         stage("Test Application") {
             steps {
-                sh 'mvn -B test'
+                sh '''
+                mvn -B -T 1C test
+                '''
             }
         }
     }

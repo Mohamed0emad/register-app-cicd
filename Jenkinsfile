@@ -6,35 +6,36 @@ pipeline {
         maven 'Maven3'
     }
 
+    environment {
+        MAVEN_REPO = "/var/lib/jenkins/.m2"
+        MAVEN_OPTS = "-Dmaven.repo.local=${MAVEN_REPO}"
+    }
+
     stages {
 
         stage("Cleanup Workspace") {
             steps {
-                cleanWs()
+                sh 'rm -rf target || true'
             }
         }
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main',
+                git(
+                    branch: 'main',
                     credentialsId: 'github',
-                    url: 'https://github.com/Mohamed0emad/Food-Lover-main.git',
-                    shallow: true
-                sh "ls -al"
+                    url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
+                )
             }
         }
 
-        stage("Build Application") {
+        stage("Build & Test") {
             steps {
-                sh 'mvn -Dmaven.repo.local=$HOME/.m2/repository clean package'
+                // نبني المشروع كله من الـ root pom.xml
+                sh '''
+                mvn -B -T 1C -f pom.xml clean package test
+                '''
             }
         }
-
-        stage("Test Application") {
-            steps {
-                sh 'mvn -Dmaven.repo.local=$HOME/.m2/repository test'
-            }
-        }
-
     }
 }

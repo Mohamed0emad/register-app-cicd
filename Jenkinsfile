@@ -14,14 +14,6 @@ pipeline {
             }
         }
 
-        stage("Checkout from SCM") {
-            steps {
-                git branch: 'main',
-                    credentialsId: 'github',
-                    url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
-            }
-        }
-
         stage("Build Application") {
             steps {
                 sh "mvn clean package"
@@ -33,6 +25,5 @@ pipeline {
                 sh "mvn test"
             }
         }
-
     }
 }

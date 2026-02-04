@@ -7,22 +7,21 @@ pipeline {
     }
 
     stages {
-
-        stage("Cleanup Workspace") {
+        stage('Checkout') {
             steps {
-                cleanWs()
+                checkout scm
             }
         }
 
-        stage("Build Application") {
+        stage('Build') {
             steps {
-                sh "mvn clean package"
+                sh 'mvn clean package -B'
             }
         }
 
-        stage("Test Application") {
+        stage('Test') {
             steps {
-                sh "mvn test"
+                sh 'mvn test -B'
             }
         }
     }

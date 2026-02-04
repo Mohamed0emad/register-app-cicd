@@ -1,12 +1,13 @@
 pipeline {
-    agent any
+    agent { label 'agent' }
 
     tools {
-        jdk 'java17'
+        jdk 'Java17'
         maven 'Maven3'
     }
 
     stages {
+
         stage("Cleanup Workspace") {
             steps {
                 cleanWs()
@@ -15,7 +16,9 @@ pipeline {
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
+                git branch: 'main',
+                    credentialsId: 'github',
+                    url: 'https://github.com/Mohamed0emad/Food-Lover-main.git'
             }
         }
 
@@ -23,12 +26,13 @@ pipeline {
             steps {
                 sh "mvn clean package"
             }
-        
-        stage("Test Application"){
-           steps {
-                 sh "mvn test"
-           }
-       }
+        }
+
+        stage("Test Application") {
+            steps {
+                sh "mvn test"
+            }
+        }
+
     }
 }
-

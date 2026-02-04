@@ -18,7 +18,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     credentialsId: 'github',
-                    url: 'https://github.com/Mohamed0emad/Food-Lover-main.git'
+                    url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
             }
         }
 

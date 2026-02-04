@@ -7,21 +7,29 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Cleanup Workspace') {
             steps {
-                checkout scm
+                cleanWs()
             }
         }
 
-        stage('Build') {
+        stage('Checkout SCM') {
             steps {
-                sh 'mvn clean package -B'
+                git branch: 'main',
+                    credentialsId: 'github',
+                    url: 'https://github.com/Mohamed0emad/register-app-cicd.git'
             }
         }
 
-        stage('Test') {
+        stage('Build All Modules') {
             steps {
-                sh 'mvn test -B'
+                sh 'mvn -B clean package'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'mvn test'
             }
         }
     }
